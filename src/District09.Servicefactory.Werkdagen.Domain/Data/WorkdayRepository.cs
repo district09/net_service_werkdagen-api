@@ -7,13 +7,13 @@ using District09.Servicefactory.Werkdagen.Domain.Models;
 
 namespace District09.Servicefactory.Werkdagen.Domain.Data
 {
-    public class WerkdagRepository : IWerkdagRepository
+    public class WorkdayRepository : IWorkdayRepository
     {
-        private readonly WerkDagData _data;
+        private readonly WorkDayData _data;
 
-        private IEnumerable<WerkDag> FreeDays => _data.Werkdagen.Where(e => !e.IsWerkDag);
+        private IEnumerable<WorkDay> FreeDays => _data.WorkDays.Where(e => !e.IsWerkDag);
 
-        public WerkdagRepository(IFreedayDataProvider dataProvider)
+        public WorkdayRepository(IFreedayDataProvider dataProvider)
         {
             _data = dataProvider.ProvideData();
         }
@@ -32,11 +32,17 @@ namespace District09.Servicefactory.Werkdagen.Domain.Data
         {
             var counter = 0;
             var retrievedDate = from.Date;
-            var direction = range < 0 ? -1 : 1;
+            var direction = range <= 0 ? -1 : 1;
+
+            if (range == 0 && IsFreeDay(DateTime.Today))
+            {
+                range = -1;
+            }
+
             while (counter != range)
             {
                 retrievedDate = retrievedDate.AddDays(direction);
-                if (FreeDays.Any(data => retrievedDate.Equals(data.DateTime.Date)))
+                if (IsFreeDay(retrievedDate))
                 {
                     // retrieved day is a free day, not counting it
                     continue;
@@ -45,13 +51,30 @@ namespace District09.Servicefactory.Werkdagen.Domain.Data
                 // retrieved day is a workday, counter should go to range
                 counter += direction;
 
-                if (retrievedDate < _data.LowerBound() || retrievedDate > _data.HigherBound())
-                {
-                    throw new DateOutOfBoundsException(retrievedDate);
-                }
+                CheckBounds(retrievedDate);
             }
 
             return retrievedDate;
+        }
+
+        private bool IsFreeDay(DateTime day)
+        {
+            return FreeDays.Any(data => day.Equals(data.DateTime.Date));
+        }
+
+        private void CheckBounds(DateTime day)
+        {
+            var lowerBound = _data.LowerBound();
+            var higherBound = _data.HigherBound();
+            if (day < lowerBound)
+            {
+                throw new DateOutOfBoundsException(lowerBound);
+            }
+
+            if (day > higherBound)
+            {
+                throw new DateOutOfBoundsException(higherBound);
+            }
         }
     }
 }
