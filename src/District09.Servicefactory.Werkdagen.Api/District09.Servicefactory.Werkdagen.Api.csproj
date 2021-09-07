@@ -5,7 +5,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <ProjectReference Include="..\District09.Servicefactory.Weekdagen.Domain\District09.Servicefactory.Weekdagen.Domain.csproj"/>
+        <ProjectReference Include="..\District09.Servicefactory.Werkdagen.Domain\District09.Servicefactory.Werkdagen.Domain.csproj" />
     </ItemGroup>
 
 </Project>

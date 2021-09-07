@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace District09.Servicefactory.Weekdagen.Api
+namespace District09.Servicefactory.Werkdagen.Api
 {
     public class Program
     {

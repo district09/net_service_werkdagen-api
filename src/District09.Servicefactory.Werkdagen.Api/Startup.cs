@@ -1,11 +1,11 @@
-using District09.Servicefactory.Weekdagen.Domain.Configuration;
+using District09.Servicefactory.Werkdagen.Domain.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace District09.Servicefactory.Weekdagen.Api
+namespace District09.Servicefactory.Werkdagen.Api
 {
     public class Startup
     {
@@ -16,22 +16,11 @@ namespace District09.Servicefactory.Weekdagen.Api
 
         public IConfiguration Configuration { get; }
 
-        private void StartupConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-        }
 
-
-        public void ConfigureDevelopmentServices(IServiceCollection services)
-        {
-            services.ConfigureDevelopmentResources(Configuration);
-            StartupConfigureServices(services);
-        }
-
-        public void ConfigureProductionServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureResources(Configuration);
-            StartupConfigureServices(services);
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
