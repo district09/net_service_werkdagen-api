@@ -5,6 +5,6 @@ namespace District09.Servicefactory.Werkdagen.Domain.Contracts
 {
     public interface IFreedayDataProvider
     {
-        public WerkDagData ProvideData();
+        public WorkDayData ProvideData();
     }
 }

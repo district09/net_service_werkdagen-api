@@ -7,7 +7,7 @@ namespace District09.Servicefactory.Werkdagen.Domain.Exceptions
     {
         private readonly DateTime _input;
 
-        public DateOutOfBoundsException(DateTime input) : base($"input {input:O} is out of bounds")
+        public DateOutOfBoundsException(DateTime input) : base($"requested date is exceeding boundary of {input}")
         {
             _input = input;
         }

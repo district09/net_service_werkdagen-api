@@ -2,6 +2,7 @@ using CorrelationId;
 using CorrelationId.DependencyInjection;
 using Digipolis.Microservices.Routing;
 using Digipolis.Serilog.Elk.Configuration;
+using District09.Servicefactory.Werkdagen.Api.Configuration;
 using District09.Servicefactory.Werkdagen.Domain.Configuration;
 using Elastic.Apm.NetCoreAll;
 using Microsoft.AspNetCore.Builder;
@@ -32,7 +33,9 @@ namespace District09.Servicefactory.Werkdagen.Api
                 opts.ResponseHeader = "CorrelationId";
             });
             services.ConfigureResources(Configuration);
-            services.AddControllers(options => options.UseGlobalRoutePrefix(new RouteAttribute("")))
+            var commonOptions = Configuration.Get<CommonOptions>();
+            services.AddControllers(options =>
+                    options.UseGlobalRoutePrefix(new RouteAttribute(commonOptions.AppNamespacePrefix)))
                 .AddNewtonsoftJson();
         }
 

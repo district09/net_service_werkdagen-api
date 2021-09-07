@@ -20,17 +20,14 @@ namespace District09.Servicefactory.Werkdagen.Domain.Data.Providers
             _excellConfigOptions = configOptions.Value;
         }
 
-        public WerkDagData ProvideData()
+        public WorkDayData ProvideData()
         {
-            var path = Path.GetDirectoryName(Assembly.GetAssembly(GetType())?.Location) ?? "";
-            var filePath = Path.Combine(path, _excellConfigOptions.ExcellFilePath);
-
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            using var stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
+            using var stream = File.Open(_excellConfigOptions.ExcellFilePath, FileMode.Open, FileAccess.Read);
             using var reader = ExcelReaderFactory.CreateReader(stream);
 
-            var werkdagData = new WerkDagData();
+            var werkdagData = new WorkDayData();
             do
             {
                 while (reader.Read())
@@ -38,7 +35,7 @@ namespace District09.Servicefactory.Werkdagen.Domain.Data.Providers
                     if (reader.Depth == 0) continue;
                     var datestr = reader.GetString(_excellConfigOptions.DateInColumn);
                     var date = DateTime.Parse(datestr);
-                    werkdagData.Werkdagen.Add(new WerkDag { DateTime = date, IsWerkDag = false });
+                    werkdagData.WorkDays.Add(new WorkDay { DateTime = date, IsWerkDag = false });
                 }
             } while (reader.NextResult());
 
