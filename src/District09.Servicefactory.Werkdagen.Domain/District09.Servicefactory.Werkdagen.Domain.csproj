@@ -9,6 +9,7 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.18" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.18" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.18" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
     </ItemGroup>
 
