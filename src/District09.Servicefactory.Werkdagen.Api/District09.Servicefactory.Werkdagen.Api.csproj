@@ -7,5 +7,15 @@
     <ItemGroup>
         <ProjectReference Include="..\District09.Servicefactory.Werkdagen.Domain\District09.Servicefactory.Werkdagen.Domain.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="CorrelationId" Version="3.0.1" />
+      <PackageReference Include="Digipolis.Microservices.Core" Version="2.1.1" />
+      <PackageReference Include="Digipolis.Microservices.Health" Version="1.1.5" />
+      <PackageReference Include="Digipolis.Serilog.Elk.Configuration" Version="2.0.1" />
+      <PackageReference Include="Digipolis.Serilog.Elk.ConsoleSink" Version="2.0.0" />
+      <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.11.0" />
+      <PackageReference Include="Elastic.Apm.SerilogEnricher" Version="1.5.3" />
+    </ItemGroup>
 
 </Project>
