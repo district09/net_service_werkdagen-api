@@ -63,7 +63,7 @@ namespace District09.Servicefactory.Werkdagen.Tests
         }
 
         [Fact]
-        public void OutOfBoundDateShouldThrowException()
+        public void LowerOutOfBoundDateShouldThrowException()
         {
             var repo = CreateRepo(new List<WorkDay>
             {
@@ -72,6 +72,18 @@ namespace District09.Servicefactory.Werkdagen.Tests
             });
 
             Assert.Throws<DateOutOfBoundsException>(() => repo.FindDay(-60));
+        }
+
+        [Fact]
+        public void HigherOutOfBoundDateShouldThrowException()
+        {
+            var repo = CreateRepo(new List<WorkDay>
+            {
+                new WorkDay { DateTime = DateTime.Now.AddDays(-1), IsWerkDag = false },
+                new WorkDay { DateTime = DateTime.Now.AddDays(-10), IsWerkDag = false }
+            });
+
+            Assert.Throws<DateOutOfBoundsException>(() => repo.FindDay(60));
         }
 
         [Fact]
@@ -96,6 +108,22 @@ namespace District09.Servicefactory.Werkdagen.Tests
             var found = repo.FindDay(0);
 
             Assert.Equal(DateTime.Today.AddDays(-2), found);
+        }
+
+        [Fact]
+        public void FindDateFromHistoricalPovShouldReturnCorrectDate()
+        {
+            var repo = CreateRepo(new[]
+            {
+                new WorkDay { DateTime = DateTime.Today, IsWerkDag = false },
+                new WorkDay { DateTime = DateTime.Today.AddDays(-1), IsWerkDag = false },
+                new WorkDay { DateTime = DateTime.Today.AddDays(-2), IsWerkDag = false },
+                new WorkDay { DateTime = DateTime.Today.AddDays(-3), IsWerkDag = false }
+            });
+
+            var found = repo.FindDay(DateTime.Today.AddDays(-2), -1);
+
+            Assert.Equal(DateTime.Today.AddDays(-4), found);
         }
 
         private static IWorkdayRepository CreateRepo(IEnumerable<WorkDay> days)
