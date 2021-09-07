@@ -15,7 +15,7 @@ namespace District09.Servicefactory.Werkdagen.Tests
         [Fact]
         public void RepoWithoutFreeDaysShouldReturnXDaysAgo()
         {
-            var repo = CreateRepo(new List<WerkDag>());
+            var repo = CreateRepo(new List<WorkDay>());
 
             var today = DateTime.Now.Date;
 
@@ -27,9 +27,9 @@ namespace District09.Servicefactory.Werkdagen.Tests
         [Fact]
         public void RepoWithYesterdayIncludedShouldReturnPreviousDay()
         {
-            var repo = CreateRepo(new List<WerkDag>()
+            var repo = CreateRepo(new List<WorkDay>()
             {
-                new WerkDag { DateTime = DateTime.Now.AddDays(-1).Date, IsWerkDag = false }
+                new WorkDay { DateTime = DateTime.Now.AddDays(-1).Date, IsWerkDag = false }
             });
 
             var today = DateTime.Now.Date;
@@ -40,7 +40,7 @@ namespace District09.Servicefactory.Werkdagen.Tests
         [Fact]
         public void RepoWithoutFreeDaysShouldReturnNextXDay()
         {
-            var repo = CreateRepo(new List<WerkDag>());
+            var repo = CreateRepo(new List<WorkDay>());
 
             var today = DateTime.Now.Date;
 
@@ -52,9 +52,9 @@ namespace District09.Servicefactory.Werkdagen.Tests
         [Fact]
         public void RepoWithTomorrowIncludedShouldReturnNextDay()
         {
-            var repo = CreateRepo(new List<WerkDag>()
+            var repo = CreateRepo(new List<WorkDay>()
             {
-                new WerkDag() { DateTime = DateTime.Now.AddDays(1).Date, IsWerkDag = false }
+                new WorkDay() { DateTime = DateTime.Now.AddDays(1).Date, IsWerkDag = false }
             });
 
             var today = DateTime.Now.Date;
@@ -65,24 +65,48 @@ namespace District09.Servicefactory.Werkdagen.Tests
         [Fact]
         public void OutOfBoundDateShouldThrowException()
         {
-            var repo = CreateRepo(new List<WerkDag>
+            var repo = CreateRepo(new List<WorkDay>
             {
-                new WerkDag { DateTime = DateTime.Now.AddDays(-1), IsWerkDag = false },
-                new WerkDag { DateTime = DateTime.Now.AddDays(-10), IsWerkDag = false }
+                new WorkDay { DateTime = DateTime.Now.AddDays(-1), IsWerkDag = false },
+                new WorkDay { DateTime = DateTime.Now.AddDays(-10), IsWerkDag = false }
             });
 
             Assert.Throws<DateOutOfBoundsException>(() => repo.FindDay(-60));
         }
 
-        private static IWerkdagRepository CreateRepo(IEnumerable<WerkDag> days)
+        [Fact]
+        public void RangeZeroAndEmptyListShouldReturnToday()
         {
-            var data = new WerkDagData()
+            var repo = CreateRepo(new List<WorkDay>());
+
+            var found = repo.FindDay(0);
+
+            Assert.Equal(DateTime.Today, found.Date);
+        }
+
+        [Fact]
+        public void RangeZeroAndFilledListShouldReturnPreviousValidDay()
+        {
+            var repo = CreateRepo(new[]
             {
-                Werkdagen = days.ToList()
+                new WorkDay { DateTime = DateTime.Today, IsWerkDag = false },
+                new WorkDay { DateTime = DateTime.Today.AddDays(-1), IsWerkDag = false }
+            });
+
+            var found = repo.FindDay(0);
+
+            Assert.Equal(DateTime.Today.AddDays(-2), found);
+        }
+
+        private static IWorkdayRepository CreateRepo(IEnumerable<WorkDay> days)
+        {
+            var data = new WorkDayData()
+            {
+                WorkDays = days.ToList()
             };
             var dataProvider = new Mock<IFreedayDataProvider>();
             dataProvider.Setup(provider => provider.ProvideData()).Returns(data);
-            return new WerkdagRepository(dataProvider.Object);
+            return new WorkdayRepository(dataProvider.Object);
         }
     }
 }
