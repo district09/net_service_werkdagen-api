@@ -9,4 +9,5 @@ d09Project  kind: "netcore31",
             dotnetTestFolder: "District09.Servicefactory.Werkdagen.Tests",
             dotnetTestFile: "District09.Servicefactory.Werkdagen.Tests.csproj",
             repositoryUrl: "https://github.com/district09/werkdagen-service.git",
-            useSemanticRelease: "true"
+            useSemanticRelease: "true",
+            generateChangelog: "true"
