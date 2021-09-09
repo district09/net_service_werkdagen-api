@@ -59,8 +59,11 @@ namespace District09.Servicefactory.Werkdagen.Domain.Data
 
         private bool IsFreeDay(DateTime day)
         {
-            return FreeDays.Any(data => day.Equals(data.DateTime.Date));
+            return FreeDays.Any(data => day.Equals(data.DateTime.Date)) || IsWeekend(day);
         }
+
+        private static bool IsWeekend(DateTime day) =>
+            day.Date.DayOfWeek == DayOfWeek.Saturday || day.Date.DayOfWeek == DayOfWeek.Sunday;
 
         private void CheckBounds(DateTime day)
         {
