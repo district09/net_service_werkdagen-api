@@ -17,11 +17,11 @@ namespace District09.Servicefactory.Werkdagen.Tests
         {
             var repo = CreateRepo(new List<WorkDay>());
 
-            var today = DateTime.Now.Date;
+            var today = GetFriday();
 
-            var foundDay = repo.FindDay(-5);
+            var foundDay = repo.FindDay(today, -2);
 
-            Assert.Equal(today.AddDays(-5).Date, foundDay.Date);
+            Assert.Equal(today.AddDays(-2).Date, foundDay.Date);
         }
 
         [Fact]
@@ -29,11 +29,11 @@ namespace District09.Servicefactory.Werkdagen.Tests
         {
             var repo = CreateRepo(new List<WorkDay>()
             {
-                new WorkDay { DateTime = DateTime.Now.AddDays(-1).Date, IsWerkDag = false }
+                new WorkDay { DateTime = GetFriday().AddDays(-1).Date, IsWerkDag = false }
             });
 
-            var today = DateTime.Now.Date;
-            var founDay = repo.FindDay(-1);
+            var today = GetFriday();
+            var founDay = repo.FindDay(today, -1);
             Assert.Equal(today.AddDays(-2).Date, founDay.Date);
         }
 
@@ -42,11 +42,11 @@ namespace District09.Servicefactory.Werkdagen.Tests
         {
             var repo = CreateRepo(new List<WorkDay>());
 
-            var today = DateTime.Now.Date;
+            var today = GetFriday();
 
-            var foundDay = repo.FindDay(5);
+            var foundDay = repo.FindDay(today, 5);
 
-            Assert.Equal(today.AddDays(5).Date, foundDay.Date);
+            Assert.Equal(today.AddDays(7).Date, foundDay.Date);
         }
 
         [Fact]
@@ -54,12 +54,12 @@ namespace District09.Servicefactory.Werkdagen.Tests
         {
             var repo = CreateRepo(new List<WorkDay>()
             {
-                new WorkDay() { DateTime = DateTime.Now.AddDays(1).Date, IsWerkDag = false }
+                new WorkDay() { DateTime = GetFriday().Date, IsWerkDag = false }
             });
 
-            var today = DateTime.Now.Date;
-            var founDay = repo.FindDay(1);
-            Assert.Equal(today.AddDays(2).Date, founDay.Date);
+            var today = GetFriday().AddDays(-1); // thursday
+            var founDay = repo.FindDay(today, 1);
+            Assert.Equal(today.AddDays(4).Date, founDay.Date);
         }
 
         [Fact]
@@ -67,11 +67,11 @@ namespace District09.Servicefactory.Werkdagen.Tests
         {
             var repo = CreateRepo(new List<WorkDay>
             {
-                new WorkDay { DateTime = DateTime.Now.AddDays(-1), IsWerkDag = false },
-                new WorkDay { DateTime = DateTime.Now.AddDays(-10), IsWerkDag = false }
+                new WorkDay { DateTime = GetFriday().AddDays(-1), IsWerkDag = false },
+                new WorkDay { DateTime = GetFriday().AddDays(-10), IsWerkDag = false }
             });
 
-            Assert.Throws<DateOutOfBoundsException>(() => repo.FindDay(-60));
+            Assert.Throws<DateOutOfBoundsException>(() => repo.FindDay(GetFriday(), -60));
         }
 
         [Fact]
@@ -79,11 +79,11 @@ namespace District09.Servicefactory.Werkdagen.Tests
         {
             var repo = CreateRepo(new List<WorkDay>
             {
-                new WorkDay { DateTime = DateTime.Now.AddDays(-1), IsWerkDag = false },
-                new WorkDay { DateTime = DateTime.Now.AddDays(-10), IsWerkDag = false }
+                new WorkDay { DateTime = GetFriday().AddDays(-1), IsWerkDag = false },
+                new WorkDay { DateTime = GetFriday().AddDays(-10), IsWerkDag = false }
             });
 
-            Assert.Throws<DateOutOfBoundsException>(() => repo.FindDay(60));
+            Assert.Throws<DateOutOfBoundsException>(() => repo.FindDay(GetFriday(), 60));
         }
 
         [Fact]
@@ -91,9 +91,9 @@ namespace District09.Servicefactory.Werkdagen.Tests
         {
             var repo = CreateRepo(new List<WorkDay>());
 
-            var found = repo.FindDay(0);
+            var found = repo.FindDay(GetFriday(), 0);
 
-            Assert.Equal(DateTime.Today, found.Date);
+            Assert.Equal(GetFriday(), found.Date);
         }
 
         [Fact]
@@ -101,13 +101,13 @@ namespace District09.Servicefactory.Werkdagen.Tests
         {
             var repo = CreateRepo(new[]
             {
-                new WorkDay { DateTime = DateTime.Today, IsWerkDag = false },
-                new WorkDay { DateTime = DateTime.Today.AddDays(-1), IsWerkDag = false }
+                new WorkDay { DateTime = GetFriday(), IsWerkDag = false }, // friday
+                new WorkDay { DateTime = GetFriday().AddDays(-1), IsWerkDag = false } // thursday
             });
 
-            var found = repo.FindDay(0);
+            var found = repo.FindDay(GetFriday(), 0);
 
-            Assert.Equal(DateTime.Today.AddDays(-2), found);
+            Assert.Equal(GetFriday().AddDays(-2), found);
         }
 
         [Fact]
@@ -115,15 +115,15 @@ namespace District09.Servicefactory.Werkdagen.Tests
         {
             var repo = CreateRepo(new[]
             {
-                new WorkDay { DateTime = DateTime.Today, IsWerkDag = false },
-                new WorkDay { DateTime = DateTime.Today.AddDays(-1), IsWerkDag = false },
-                new WorkDay { DateTime = DateTime.Today.AddDays(-2), IsWerkDag = false },
-                new WorkDay { DateTime = DateTime.Today.AddDays(-3), IsWerkDag = false }
+                new WorkDay { DateTime = GetFriday(), IsWerkDag = false }, // friday
+                new WorkDay { DateTime = GetFriday().AddDays(-1), IsWerkDag = false }, // thursday
+                new WorkDay { DateTime = GetFriday().AddDays(-2), IsWerkDag = false }, // wednesday
+                new WorkDay { DateTime = GetFriday().AddDays(-3), IsWerkDag = false } // Tuesday
             });
 
-            var found = repo.FindDay(DateTime.Today.AddDays(-2), -1);
+            var found = repo.FindDay(GetFriday().AddDays(-2), -1);
 
-            Assert.Equal(DateTime.Today.AddDays(-4), found);
+            Assert.Equal(GetFriday().AddDays(-4), found);
         }
 
         private static IWorkdayRepository CreateRepo(IEnumerable<WorkDay> days)
@@ -135,6 +135,11 @@ namespace District09.Servicefactory.Werkdagen.Tests
             var dataProvider = new Mock<IFreedayDataProvider>();
             dataProvider.Setup(provider => provider.ProvideData()).Returns(data);
             return new WorkdayRepository(dataProvider.Object);
+        }
+
+        private static DateTime GetFriday()
+        {
+            return new DateTime(2021, 9, 10).Date;
         }
     }
 }
