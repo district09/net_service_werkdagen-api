@@ -34,7 +34,7 @@ namespace District09.Servicefactory.Werkdagen.Domain.Data
             var retrievedDate = from.Date;
             var direction = range <= 0 ? -1 : 1;
 
-            if (range == 0 && IsFreeDay(DateTime.Today))
+            if (range == 0 && IsFreeDay(from))
             {
                 range = -1;
             }
