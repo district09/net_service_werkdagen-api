@@ -3,7 +3,7 @@
 d09Project  kind: "netcore31",
             namespace: "opendata",
             service: ["werkdagen-api-v1"],
-            gitOpsPath: "werkdagen-service/werkdagen-service-v1",
+            gitOpsPath: "werkdagen-service/werkdagen-api-v1",
             dotnetFolder: "src/",
             dotnetSlnFile: "District09.Servicefactory.Werkdagen.sln", 
             dotnetTestFolder: "District09.Servicefactory.Werkdagen.Tests",

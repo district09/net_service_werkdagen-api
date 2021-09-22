@@ -1,39 +1,17 @@
 # README #
 
-Short discrition of this application
+This is the werkdagen API. The API has 1 method. This method can be used to calculate a working day in the past or future, starting from the current date. If no range is set then the service will return the last workday in the past. If a negative range x is set then the service will return the x-th last workday in the past. If a positive range x is set then the service will return the x-th next workday in the present. 
+
+A workday is a day that is neither in a weekend or on a holliday. 
 
 ## Features ##
 
-* A
-* List
-* Off
-* All
-* The
-* Features
-
-## Security ##
-Always keep following security rules in mind when using credentials!
-
-### How to use the appliction ###
-
-A short discription on which security measures are implemented and how to get them to work. 
-
-### Do's ###
-
-* Store credentials in a password manager. 
-* Use environment variables to make credentials available to your applications.
-* If this is not possible check for secure alternatives for your technology.
-* Share credentials using point-to-point communication and only to the people that need the credentials.
-* Avoid sharing credentials after initial exchange.
-
-### Don'ts ###
-
-* Don't hard code credentials.
-* Don't communicate credentials with clients.
-* Don't store credentials in public or private repositories.
-* Don't store credentials in documentation.
+* Get workday is used to return the last workday in the past from today's date. If the current date is a workday then the current date will be returned. 
+* Get workday with a range is used to return either the last or the next workday in the past or future starting from the current date that is within the given range. 
 
 ## Dependencies
+
+This service uses a list with dates that are holidays. The list is provided in Excel format and the first column contains the dates that match with hollidays. 
 
 ## Building the source code ##
 
@@ -46,6 +24,17 @@ A short discription on which security measures are implemented and how to get th
 ## Running the application ##
 
 ### Environment variables ###
+
+* AppNamespacePrefix: used to provide the API with a prefix in the URI
+* Excell__ExcellFilePath: path to the Excel file containing the hollidays. This file should be provided in the container. 
+* Excell__DateInColumn: Used to indicate the column where the hollidays are in.
+* Serilog__MinimumLevel__Default: Used to increase/decrease the logging level of the application. 
+* ELASTIC_APM_SECRET_TOKEN: Needed when using APM
+* ELASTIC_APM_SERVER_URL: Needed when using APM
+* ELASTIC_APM_VERIFY_SERVER_CERT: Needed when using APM
+* ELASTIC_APM_CENTRAL_CONFIG: Needed when using APM
+* ELASTIC_APM_SERVICE_NAME: Needed when using APM
+* ELASTIC_APM_ENVIRONMENT: Needed when using APM
 
 ## Testing the application ##
 
