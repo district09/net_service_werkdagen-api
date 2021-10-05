@@ -53,6 +53,14 @@ namespace District09.Servicefactory.Werkdagen.Api
                 app.UseAllElasticApm();
             }
 
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .WithMethods("GET")
+                    .AllowAnyHeader()
+                    .Build();
+            });
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
