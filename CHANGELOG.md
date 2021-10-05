@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.1.0](https://github.com/district09/werkdagen-service/compare/v1.0.2...v1.1.0) (2021-10-05)
+
+
+### Features
+
+* set cors headers ([99f51a2](https://github.com/district09/werkdagen-service/commit/99f51a20fae7373a72596a679cd7b27031e9b06d))
+
 ## [1.0.2](https://github.com/district09/werkdagen-service/compare/v1.0.1...v1.0.2) (2021-09-13)
 
 
