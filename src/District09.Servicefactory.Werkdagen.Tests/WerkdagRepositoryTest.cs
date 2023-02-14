@@ -15,7 +15,11 @@ namespace District09.Servicefactory.Werkdagen.Tests
         [Fact]
         public void RepoWithoutFreeDaysShouldReturnXDaysAgo()
         {
-            var repo = CreateRepo(new List<WorkDay>());
+            var repo = CreateRepo(new List<WorkDay>
+            {
+                new WorkDay { DateTime = GetFriday().AddDays(50) },
+                new WorkDay { DateTime = GetFriday().AddDays(-100) }
+            });
 
             var today = GetFriday();
 
@@ -40,7 +44,11 @@ namespace District09.Servicefactory.Werkdagen.Tests
         [Fact]
         public void RepoWithoutFreeDaysShouldReturnNextXDay()
         {
-            var repo = CreateRepo(new List<WorkDay>());
+            var repo = CreateRepo(new List<WorkDay>
+            {
+                new WorkDay { DateTime = GetFriday().AddDays(50) },
+                new WorkDay { DateTime = GetFriday().AddDays(-100) }
+            });
 
             var today = GetFriday();
 
